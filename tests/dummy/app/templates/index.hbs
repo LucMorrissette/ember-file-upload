@@ -20,7 +20,7 @@
   <section class="max-w-md mx-auto">
     <div class="my-16 text-center">
       <h1 class="my-8">Demo</h1>
-      {{#file-dropzone name="photos" class="demo-dropzone" as |dropzone queue|}}
+      {{#file-dropzone name="photos" autoClear=true class="demo-dropzone" as |dropzone queue|}}
         <div class="dropzone-upload-area upload {{if dropzone.active "active"}}">
           {{#if dropzone.supported}}
             <div class="emoji mb-16">
@@ -42,7 +42,7 @@
             {{/if}}
             {{#file-upload
               name="photos"
-              for="upload-photo"
+              for="upload-photo2"
               multiple=true
               onfileadd=(action "uploadProof")
               accept="image/*,video/*,audio/*"
@@ -54,11 +54,61 @@
 
           {{#if queue.files.length}}
             Uploaded {{queue.uploaded.length}} / {{queue.files.length}} files. ({{queue.progress}}%)
+
+            {{#each queue.files as |file|}}
+              <br> :: {{file.name}} -- {{file.progress}}
+            {{/each}}
+         {{/if}}
+        </div>
+      {{/file-dropzone}}
+    </div>
+
+
+    <div class="my-16 text-center">
+      <h1 class="my-8">Demo</h1>
+      {{#file-dropzone name="secondFileUploader" autoClear=false class="demo-dropzone" as |dropzoneX queueX|}}
+        <div class="dropzone-upload-area upload {{if dropzoneX.active "active"}}">
+          {{#if dropzoneX.supported}}
+            <div class="emoji mb-16">
+              {{#if dropzoneX.active}}
+                {{#if dropzoneX.valid}}
+                  ✨👽✨
+                {{else}}
+                  🐮
+                {{/if}}
+              {{else}}
+                👽
+              {{/if}}
+            </div>
+          {{/if}}
+
+          <p>
+            {{#if dropzoneX.supported}}
+              Drag your proof or
+            {{/if}}
+            {{#file-upload
+              name="secondFileUploader"
+              for="upload-photo3"
+              multiple=true
+              onfileadd=(action "uploadProof")
+              accept="image/*,video/*,audio/*"
+            }}
+              <a>select them</a>
+            {{/file-upload}}
+            to upload.
+          </p>
+
+          {{#if queueX.files.length}}
+            Uploaded {{queueX.uploaded.length}} / {{queueX.files.length}} files. ({{queueX.progress}}%)
+
+             {{#each queueX.files as |file|}}
+              <br> :: {{file.name}} -- {{file.progress}}
+            {{/each}}
           {{/if}}
         </div>
       {{/file-dropzone}}
     </div>
-    <div class="my-16">
+    {{!-- <div class="my-16">
       <ul class="demo-uploaded-files-list">
         {{#each model as |file|}}
           <li>
@@ -76,6 +126,13 @@
           </li>
         {{/each}}
       </ul>
-    </div>
+    </div> --}}
   </section>
+
+  {{!-- master queue --}}
+  <div style="border: 1px solid green">
+     {{#each fileQueue.files as |file|}}
+     <br><br>{{file.name}} -- {{file.queue.name}}
+      {{/each}}
+  </div>
 </div>

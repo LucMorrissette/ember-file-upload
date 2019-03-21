@@ -1,7 +1,9 @@
 import Controller from '@ember/controller';
 import { setProperties, get } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default Controller.extend({
+  fileQueue: service(),
   actions: {
     uploadProof(file) {
       let asset = {

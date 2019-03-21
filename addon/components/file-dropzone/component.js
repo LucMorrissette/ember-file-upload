@@ -151,7 +151,7 @@ export default Component.extend({
       let queueName = get(this, 'name');
       let queues = get(this, 'fileQueue');
       return queues.find(queueName) ||
-             queues.create(queueName);
+             queues.create(queueName, this.autoClear);
     }
   }),
 

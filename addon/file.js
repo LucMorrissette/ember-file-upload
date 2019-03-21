@@ -97,6 +97,8 @@ function upload(file, url, opts, uploadFn) {
 
   uploadPromise = uploadPromise.then(function (result) {
     set(file, 'state', 'uploaded');
+    set(file, 'loaded', get(file, 'size'));
+    set(file, 'progress', 100);
     return result;
   }, function (error) {
     set(file, 'state', 'failed');
@@ -399,7 +401,6 @@ export default EmberObject.extend({
     }
 
     let blob = new Blob([binaryData], { type: mimeType });
-
     return this.fromBlob(blob, source);
   }
 });

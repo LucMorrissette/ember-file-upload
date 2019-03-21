@@ -143,10 +143,10 @@ export default Service.extend({
     @param {String} name The name of the queue to create
     @return {Queue} The new queue.
    */
-  create(name) {
+  create(name, autoClear) {
     assert(`Queue names are required to be unique. "${name}" has already been reserved.`, this.find(name) == null);
 
-    let queue = Queue.create({ name, fileQueue: this });
+    let queue = Queue.create({ name, fileQueue: this, autoClear: autoClear });
     get(this, 'queues').push(queue);
     once(this, 'notifyPropertyChange', 'queues');
 

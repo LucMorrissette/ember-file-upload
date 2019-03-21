@@ -113,6 +113,8 @@ export default EmberObject.extend({
    */
   name: null,
 
+  autoClear: false,
+
   /**
     The list of files in the queue. This automatically gets
     flushed when all the files in the queue have settled.
@@ -156,6 +158,8 @@ export default EmberObject.extend({
     @private
    */
   flushFilesWhenSettled: observer('files.@each.state', function () {
+    if (!get(this, 'autoClear')) { return; }
+
     let files = get(this, 'files');
     let allFilesHaveSettled = files.every(function (file) {
       return ['uploaded', 'aborted'].indexOf(file.state) !== -1;
@@ -168,6 +172,17 @@ export default EmberObject.extend({
       set(this, 'files', A());
     }
   }),
+
+  flushAllUploaded() {
+    let queue = this;
+    
+    var files = get(this, 'files');
+    for (let i = files.length - 1; i >= 0; i--) {
+      if (files[i].state === 'uploaded') {
+        queue.remove(files[i]);
+      }
+    }
+  },
 
   /**
     The aggregate size (in bytes) of all files in the queue.
